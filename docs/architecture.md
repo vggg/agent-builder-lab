@@ -56,7 +56,7 @@ For each required capability:
 4. build only for an evidenced gap;
 5. reject or require human intervention when risk or uncertainty exceeds policy.
 
-Milestone 1 implements only deterministic `REUSE` and `BUILD`. `COMPOSE` is reserved in the schema, not claimed as working.
+Milestone 1 implements only deterministic `REUSE` and `BUILD`. A claim must meet the explicit confidence threshold (0.70 by default) before it can produce `REUSE`; weaker matches remain visible as research evidence but leave a build/review gap. `COMPOSE` is reserved in the schema, not claimed as working.
 
 ## Trust boundaries
 

@@ -33,6 +33,18 @@ class PipelineTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             build_graph(intent, [{"id": "a", "description": "a", "depends_on": ["b"]}])
 
+    def test_weak_claim_remains_visible_but_does_not_pass_novelty_gate(self) -> None:
+        intent = resolve_intent({"id": "i", "goal": "g", "desired_outcome": "o"})
+        graph = build_graph(intent, [{"id": "weak", "description": "weak"}])
+        catalog = [{
+            "id": "candidate", "name": "Weak claim", "capabilities": ["weak"],
+            "claim_confidence": 0.40,
+        }]
+        plan, discovered = create_plan(intent, graph, LocalDiscoveryAdapter(catalog))
+        self.assertEqual(1, len(discovered["weak"]))
+        self.assertEqual("BUILD", plan.steps[0].decision)
+        self.assertIn("threshold", plan.steps[0].reason)
+
 
 if __name__ == "__main__":
     unittest.main()
