@@ -6,13 +6,13 @@ from dataclasses import asdict
 from pathlib import Path
 
 from .capabilities import build_graph
-from .discovery import LocalDiscoveryAdapter
+from .discovery import AgntcyDirectoryAdapter, LocalDiscoveryAdapter
 from .intent import assess_suitability, resolve_intent
 from .planning import create_plan
 from .trace import Trace
 
 
-def run_scenario(path: Path) -> Trace:
+def run_scenario(path: Path, *, agntcy_url: str | None = None) -> Trace:
     data = json.loads(path.read_text(encoding="utf-8"))
     trace = Trace()
     intent = resolve_intent(data["intent"])
@@ -23,7 +23,9 @@ def run_scenario(path: Path) -> Trace:
         return trace
     graph = build_graph(intent, data["capabilities"])
     trace.record("capabilities.graph_created", asdict(graph))
-    plan, discovered = create_plan(intent, graph, LocalDiscoveryAdapter(data["local_catalog"]))
+    adapter = AgntcyDirectoryAdapter(agntcy_url) if agntcy_url else LocalDiscoveryAdapter(data["local_catalog"])
+    trace.record("discovery.started", {"adapter": adapter.name, "endpoint": agntcy_url})
+    plan, discovered = create_plan(intent, graph, adapter)
     trace.record("discovery.completed", {
         capability: [asdict(candidate) for candidate in candidates]
         for capability, candidates in discovered.items()
@@ -54,10 +56,10 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Turn intent into an inspectable, governed agent plan")
     parser.add_argument("--scenario", type=Path, required=True, help="JSON-compatible YAML scenario")
     parser.add_argument("--json", type=Path, help="optional trace output path")
+    parser.add_argument("--agntcy-url", help="use an AGNTCY AI Catalog/ARD endpoint instead of fixtures")
     args = parser.parse_args(argv)
-    trace = run_scenario(args.scenario)
+    trace = run_scenario(args.scenario, agntcy_url=args.agntcy_url)
     _print_trace(trace)
     if args.json:
         args.json.write_text(json.dumps(trace.as_dict(), indent=2) + "\n", encoding="utf-8")
     return 0
-

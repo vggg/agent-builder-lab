@@ -17,7 +17,7 @@ def create_plan(intent: IntentSpec, graph: CapabilityGraph, adapter: DiscoveryAd
             steps.append(PlanStep(
                 id=f"step-{len(steps)+1}", capability_id=capability.id, decision="REUSE",
                 candidate_id=selected.id, depends_on=capability.depends_on,
-                reason=f"best local capability claim ({selected.claim_confidence:.2f}); not capability proof",
+                reason=f"best adapter capability claim ({selected.claim_confidence:.2f}); not capability proof",
             ))
         else:
             unresolved.append(capability.id)
@@ -28,4 +28,3 @@ def create_plan(intent: IntentSpec, graph: CapabilityGraph, adapter: DiscoveryAd
             ))
     governance = evaluate_policy(intent, tuple(unresolved))
     return ExecutionPlan(intent.id, tuple(steps), governance, tuple(unresolved)), discovered
-

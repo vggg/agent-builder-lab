@@ -44,7 +44,7 @@ An adapter translates an external system into the core schemas and retains enoug
 claimed capability → verified identity → observed behavior → trusted capability
 ```
 
-The AGNTCY adapter should query a locally runnable Directory and map OASF skill data. The NANDA adapter should map public discovery/AgentFacts. The A2A adapter should resolve Agent Cards and invoke through an official client. The MCP adapter should enumerate and invoke tools through an MCP client. None of these adapters owns a registry, identity store, trust store, or gateway.
+The AGNTCY adapter queries a locally runnable Directory through its AI Catalog/ARD HTTP surface and maps OASF tags plus record metadata. It retains trust-manifest content as an unverified claim. The NANDA adapter should map public discovery/AgentFacts. The A2A adapter should resolve Agent Cards and invoke through an official client. The MCP adapter should enumerate and invoke tools through an MCP client. None of these adapters owns a registry, identity store, trust store, or gateway.
 
 ## Novelty gate
 
@@ -61,4 +61,3 @@ Milestone 1 implements only deterministic `REUSE` and `BUILD`. `COMPOSE` is rese
 ## Trust boundaries
 
 Discovery metadata is untrusted input. Selection is not authorization. Planning is not execution. Protocol success is not task success. Task success is not intent satisfaction. The trace must keep these boundaries visible.
-

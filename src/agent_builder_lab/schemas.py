@@ -38,6 +38,7 @@ class AgentCandidate:
     endpoint: str | None = None
     claim_confidence: float = 0.0
     evidence_refs: tuple[str, ...] = ()
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -76,4 +77,3 @@ class OutcomeEvidence:
 
 def to_dict(value: Any) -> dict[str, Any]:
     return asdict(value)
-

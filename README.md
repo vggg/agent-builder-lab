@@ -15,11 +15,21 @@ intent → suitability decision → capability graph → novelty gate
        → local discovery → governed plan → trace
 ```
 
-The demo uses a small local catalog. It does **not** call an LLM or a remote service, execute agents, or claim that capability matching is solved. External ecosystem adapters are explicit stubs.
+The demo uses a small local catalog. It does **not** call an LLM, execute agents, or claim that capability matching is solved. An opt-in AGNTCY Directory adapter reads the standards-facing AI Catalog/ARD HTTP API; other ecosystem adapters remain explicit stubs.
 
 ```bash
 python -m agent_builder_lab --scenario scenarios/research.yaml
 ```
+
+To inspect claims from a local AGNTCY Directory node (adjust its HTTP address as needed):
+
+```bash
+python -m agent_builder_lab \
+  --scenario scenarios/research.yaml \
+  --agntcy-url http://localhost:8080
+```
+
+The adapter reads `GET /v1/agents`, maps OASF tags and catalog metadata, and uses exact-tag or transparent lexical matching. Scans are bounded to 100 records and 20 returned candidates by default, and candidates are marked when catalog pagination was truncated; a partial scan is not evidence of global novelty. This is discovery evidence, not verification. Network access is never enabled implicitly.
 
 With an editable install, the equivalent is:
 
@@ -75,7 +85,7 @@ These are hypotheses, not implemented facts. See [the vision](docs/vision.md) an
 ## Roadmap
 
 1. **Now — deterministic local:** reproducible intent-to-plan trace.
-2. **AGNTCY local Directory:** map records/OASF skills into `AgentCandidate`; preserve raw records and mapping evidence.
+2. **Now — AGNTCY Directory:** map AI Catalog/ARD records and OASF tags into `AgentCandidate`; retain identity, trust-manifest claims, and match evidence. Next: test against a pinned local container and add structured server-side filtering.
 3. **NANDA/NEST:** discover public candidates and capture AgentFacts, availability, and trust unknowns.
 4. **A2A:** resolve Agent Cards and invoke selected agents through the official SDK.
 5. **MCP:** discover and invoke tools through an MCP client adapter.
@@ -86,4 +96,3 @@ Contributions should add adapters and experimental results without moving extern
 ## License
 
 Apache-2.0 is suggested and included because this is an interoperability-oriented reference implementation where explicit patent terms are useful. Maintainers should confirm the final license before the first public release.
-

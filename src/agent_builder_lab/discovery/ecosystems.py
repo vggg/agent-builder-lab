@@ -9,10 +9,6 @@ class _NotImplementedAdapter(DiscoveryAdapter):
         raise NotImplementedError(f"{self.name} adapter is a roadmap item; no remote claim was made")
 
 
-class AgntcyDirectoryAdapter(_NotImplementedAdapter):
-    name = "agntcy-directory"
-
-
 class NandaNestAdapter(_NotImplementedAdapter):
     name = "nanda-nest"
 
@@ -23,4 +19,3 @@ class A2AAdapter(_NotImplementedAdapter):
 
 class MCPAdapter(_NotImplementedAdapter):
     name = "mcp"
-
