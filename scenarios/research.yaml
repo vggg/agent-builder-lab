@@ -1,0 +1,22 @@
+{
+  "intent": {
+    "id": "research-recommendation-001",
+    "goal": "Research a topic and produce an evidence-backed recommendation",
+    "desired_outcome": "A recommendation whose important claims are independently checked",
+    "constraints": ["public information only", "no purchases", "no private accounts"],
+    "allowed_effects": ["read_public_information"],
+    "evidence_required": true,
+    "automation_preference": "assist"
+  },
+  "capabilities": [
+    {"id": "research.web", "description": "Find relevant public evidence"},
+    {"id": "analysis.synthesize", "description": "Synthesize evidence into a recommendation", "depends_on": ["research.web"]},
+    {"id": "verify.evidence", "description": "Check important claims against evidence", "depends_on": ["analysis.synthesize"]}
+  ],
+  "local_catalog": [
+    {"id": "local-researcher", "name": "Local Research Fixture", "capabilities": ["research.web"], "interface": "fixture", "claim_confidence": 0.90, "evidence_refs": ["examples/01-local-deterministic/catalog.md#local-researcher"]},
+    {"id": "local-analyst", "name": "Local Analysis Fixture", "capabilities": ["analysis.synthesize"], "interface": "fixture", "claim_confidence": 0.85, "evidence_refs": ["examples/01-local-deterministic/catalog.md#local-analyst"]},
+    {"id": "local-verifier", "name": "Local Verification Fixture", "capabilities": ["verify.evidence"], "interface": "fixture", "claim_confidence": 0.95, "evidence_refs": ["examples/01-local-deterministic/catalog.md#local-verifier"]}
+  ]
+}
+

@@ -1,0 +1,24 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "agent-builder-lab"
+version = "0.1.0"
+description = "An executable lab for intent-to-outcome agent composition"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "Apache-2.0"}
+authors = [{name = "Agent Builder Lab contributors"}]
+dependencies = []
+
+[project.scripts]
+agentbuilder = "agent_builder_lab.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agent_builder_lab"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
